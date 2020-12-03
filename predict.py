@@ -18,7 +18,7 @@ def accuracy(real_rates, predicted_rates):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv('dataset/validation.gz')
+    df = pd.read_csv('dataset/validation.csv')
     predicted_rates = predict(df)
     mare = accuracy(df.rate, predicted_rates)
     mare = np.round(mare, 2)

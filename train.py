@@ -9,6 +9,6 @@ def train(df):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv('dataset/train.gz')
+    df = pd.read_csv('dataset/train.csv')
     train(df)
     print("Train completed, run 'predict.py' now")
