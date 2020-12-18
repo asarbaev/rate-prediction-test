@@ -1,22 +1,7 @@
-import joblib
 import pandas as pd
 import numpy as np
-from os import path
 
-
-def train(df):
-    mean_rate = df.rate.mean()
-    print('Average rate:', mean_rate)
-    joblib.dump(mean_rate, 'artifacts/model.joblib')
-
-
-def predict(df):
-    model_file = 'artifacts/model.joblib'
-    if not path.exists(model_file):
-        raise FileNotFoundError(f'Model artifacts not found, please run "train.py" first to create {model_file}')
-
-    mean_rate = joblib.load(model_file)
-    return [mean_rate] * len(df)
+from model import Model
 
 
 def accuracy(real_rates, predicted_rates):
@@ -25,10 +10,11 @@ def accuracy(real_rates, predicted_rates):
 
 def train_and_validate():
     df = pd.read_csv('dataset/train.csv')
-    train(df)
+    model = Model()
+    model.fit(df, df.rate)
 
     df = pd.read_csv('dataset/validation.csv')
-    predicted_rates = predict(df)
+    predicted_rates = model.predict(df)
     mare = accuracy(df.rate, predicted_rates)
     mare = np.round(mare, 2)
     return mare
@@ -39,11 +25,13 @@ def generate_final_solution():
     df = pd.read_csv('dataset/train.csv')
     df_val = pd.read_csv('dataset/validation.csv')
     df = df.append(df_val).reset_index(drop=True)
-    train(df)
+
+    model = Model()
+    model.fit(df, df.rate)
 
     # generate and save test predictions
     df_test = pd.read_csv('dataset/test.csv')
-    df_test['predicted_rate'] = predict(df_test)
+    df_test['predicted_rate'] = model.predict(df_test)
     df_test.to_csv('dataset/predicted.csv', index=False)
 
 
