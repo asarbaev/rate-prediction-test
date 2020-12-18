@@ -14,7 +14,7 @@ def predict(df):
 
 
 def accuracy(real_rates, predicted_rates):
-    return np.average(abs(real_rates / predicted_rates - 1.0)) * 100.0
+    return np.average(abs(predicted_rates / real_rates - 1.0)) * 100.0
 
 
 if __name__ == "__main__":
