@@ -22,6 +22,7 @@ def encode_and_bind(original_dataframe, feature_to_encode):
     dummies = pd.get_dummies(original_dataframe[[feature_to_encode]])
     res = pd.concat([original_dataframe, dummies], axis=1)
     res = res.drop([feature_to_encode], axis=1)
+
     return(res)
 
 def to_labels(original_dataframe, feature_to_encode):
@@ -64,7 +65,6 @@ def data_preprocessing(dataset):
     features_to_label = ['transport_type', 'origin_kma', 'destination_kma']
     for feature in features_to_label:
         dataset = to_labels(dataset, feature)
-    
 
     #remove useless features
     features_to_drop = ['pickup_date', 'rate', 'valid_miles']
@@ -111,8 +111,7 @@ def train_and_validate(training_dataset_path, validation_dataset_path):
     X_val = drop_feature(df_val, 'log_rate')
     
     # create a regressor object 
-    # create a regressor object 
-    regressor = RandomForestRegressor(random_state = 0, n_jobs = -1, n_estimators = 100, verbose = 2) 
+    regressor = RandomForestRegressor(random_state = 0, n_jobs = -1, n_estimators = 100, verbose = 2)
     regressor.fit(X_train.values, Y_train.values.ravel())
     
     predicted_rates = regressor.predict(X_val.values)
